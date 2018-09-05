@@ -5,13 +5,13 @@ TypeScript API wrapper for [Targetprocess](https://www.targetprocess.com/)
 ## Installation
 
 ```
-npm install targetprocess-api
+npm install targetprocess
 ```
 
 ## Usage
 
 ```typescript
-import { Targetprocess } from "targetprocess-api";
+import { Targetprocess } from "targetprocess";
 
 // initialise the API
 const api = new Targetprocess("subdomain", "yourusername", "yourpassword");

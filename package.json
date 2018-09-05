@@ -1,5 +1,5 @@
 {
-  "name": "targetprocess-api",
+  "name": "targetprocess",
   "version": "0.1.1",
   "description": "Targetprocess API",
   "main": "index.js",
