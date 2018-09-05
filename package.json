@@ -17,6 +17,14 @@
   ],
   "author": "NewOrbit Ltd",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NewOrbit/targetprocess.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NewOrbit/targetprocess/issues"
+  },
+  "homepage": "https://github.com/NewOrbit/targetprocess#readme",
   "dependencies": {
     "@types/node": "^10.9.4",
     "@types/node-fetch": "^2.1.2",
