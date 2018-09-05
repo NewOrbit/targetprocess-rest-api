@@ -3,7 +3,7 @@ const btoa = require("btoa");
 
 import fetch from "node-fetch";
 
-class TargetProcess {
+export class TargetProcess {
     private url: string;
     private headers: {
         [index: string]: string;
@@ -22,12 +22,25 @@ class TargetProcess {
     private async requestJSON(endpoint: string) {
         const fullUrl = `${this.url}/${endpoint}`;
         
-        return fetch(fullUrl, { method: "GET", headers: this.headers })
-            .then(res => res.json());
+        const res = await fetch(fullUrl, { method: "GET", headers: this.headers });
+
+        if (!res.ok) {
+            throw Error(res.statusText);
+        }
+
+        return res.json();
     }
 
     public async getBug(id: number) {
         return this.requestJSON(`Bugs/${id}`);
+    }
+
+    public async getTask(id: number) {
+        return this.requestJSON(`Tasks/${id}`);
+    }
+
+    public async getStory(id: number) {
+        return this.requestJSON(`Userstories/${id}`);
     }
 
 }
