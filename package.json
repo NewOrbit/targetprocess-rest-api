@@ -1,6 +1,6 @@
 {
   "name": "targetprocess",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TargetProcess API",
   "main": "index.js",
   "files": [
