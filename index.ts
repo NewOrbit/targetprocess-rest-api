@@ -1,5 +1,5 @@
 // required until https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28648
-const btoa = require("btoa");
+const btoa = require("btoa"); // tslint:disable-line:no-var-requires
 
 import fetch from "node-fetch";
 
@@ -11,31 +11,13 @@ export class TargetProcess {
 
     constructor(subdomain: string, username: string, password: string) {
         this.url = `https://${subdomain}.tpondemand.com/api/v1`;
-        
+
         this.headers = {
             "Accept": "application/json",
             "Authorization": "Basic " + btoa(`${username}:${password}`),
             "Cache-Control": "no-cache",
             "Content-Type": "application/json"
         };
-    }
-
-    private async requestJSON(endpoint: string, method: string, body?: any) {
-        const fullUrl = `${this.url}/${endpoint}`;
-        
-        const data = { method, headers: this.headers };
-
-        if (body) {
-            (data as any).body = JSON.stringify(body);
-        }
-
-        const res = await fetch(fullUrl, data);
-
-        if (!res.ok) {
-            throw Error(res.statusText);
-        }
-
-        return res.json();
     }
 
     public async getBug(id: number) {
@@ -62,6 +44,24 @@ export class TargetProcess {
         };
 
         return this.requestJSON(`Times/`, "POST", body);
+    }
+
+    private async requestJSON(endpoint: string, method: string, body?: any) {
+        const fullUrl = `${this.url}/${endpoint}`;
+
+        const data = { method, headers: this.headers };
+
+        if (body) {
+            (data as any).body = JSON.stringify(body);
+        }
+
+        const res = await fetch(fullUrl, data);
+
+        if (!res.ok) {
+            throw Error(res.statusText);
+        }
+
+        return res.json();
     }
 
 }
