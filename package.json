@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "TargetProcess API",
   "main": "index.js",
+  "files": [
+    "index.js"
+  ],
   "scripts": {
     "build": "tsc",
     "lint": "tslint -c tslint.json index.ts"
