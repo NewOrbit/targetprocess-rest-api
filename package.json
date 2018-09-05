@@ -4,7 +4,7 @@
   "description": "TargetProcess API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc"
   },
   "keywords": [
     "targetprocess",
@@ -12,5 +12,14 @@
     "api"
   ],
   "author": "NewOrbit LTD",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^10.9.4",
+    "@types/node-fetch": "^2.1.2",
+    "btoa": "^1.2.1",
+    "node-fetch": "^2.2.0"
+  },
+  "devDependencies": {
+    "typescript": "^3.0.3"
+  }
 }
