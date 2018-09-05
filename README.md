@@ -10,7 +10,7 @@ npm install targetprocess
 
 ## Usage
 
-```
+```typescript
 import { TargetProcess } from "targetprocess";
 
 // initialise the API
