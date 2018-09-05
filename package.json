@@ -11,7 +11,7 @@
     "target-process",
     "api"
   ],
-  "author": "NewOrbit LTD",
+  "author": "NewOrbit Ltd",
   "license": "MIT",
   "dependencies": {
     "@types/node": "^10.9.4",

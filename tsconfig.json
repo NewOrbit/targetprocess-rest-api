@@ -1,14 +1,13 @@
 {
     "compilerOptions": {
         "module": "commonjs",
-        "outDir": "bin",
         "moduleResolution": "node",
         "lib": [
             "es2015"
         ],
         "experimentalDecorators": true
     },
-    "include": [
-        "src/**/*"
+    "files": [
+        "index.ts"
     ]
 }
