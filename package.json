@@ -4,8 +4,10 @@
   "description": "TargetProcess API",
   "main": "index.js",
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ],
+  "typings": "index.d.ts",
   "scripts": {
     "prepublishOnly": "npm run build && npm run lint",
     "build": "tsc",
