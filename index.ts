@@ -3,7 +3,7 @@ const btoa = require("btoa"); // tslint:disable-line:no-var-requires
 
 import fetch from "node-fetch";
 
-export class TargetProcess {
+export class Targetprocess {
     private url: string;
     private headers: {
         [index: string]: string;
