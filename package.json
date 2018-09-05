@@ -7,6 +7,7 @@
     "index.js"
   ],
   "scripts": {
+    "prepublishOnly": "npm run build && npm run lint",
     "build": "tsc",
     "lint": "tslint -c tslint.json index.ts"
   },
