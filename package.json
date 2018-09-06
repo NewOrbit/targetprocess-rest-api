@@ -1,7 +1,7 @@
 {
-  "name": "targetprocess-api",
+  "name": "targetprocess-rest-api",
   "version": "0.2.0",
-  "description": "Targetprocess API",
+  "description": "TypeScript API wrapper for Targetprocess",
   "main": "index.js",
   "files": [
     "index.js",
@@ -22,12 +22,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/NewOrbit/targetprocess-api.git"
+    "url": "git+https://github.com/NewOrbit/targetprocess-rest-api.git"
   },
   "bugs": {
-    "url": "https://github.com/NewOrbit/targetprocess-api/issues"
+    "url": "https://github.com/NewOrbit/targetprocess-rest-api/issues"
   },
-  "homepage": "https://github.com/NewOrbit/targetprocess-api#readme",
+  "homepage": "https://github.com/NewOrbit/targetprocess-rest-api#readme",
   "dependencies": {
     "@types/node": "^10.9.4",
     "@types/node-fetch": "^2.1.2",
