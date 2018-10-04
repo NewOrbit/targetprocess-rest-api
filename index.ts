@@ -58,7 +58,10 @@ export class Targetprocess {
         const res = await fetch(fullUrl, data);
 
         if (!res.ok) {
-            throw Error(res.statusText);
+            throw {
+                statusCode: res.status,
+                message: res.statusText
+            };
         }
 
         return res.json();
