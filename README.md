@@ -29,6 +29,17 @@ const bug = await getBug(789);
 const time = await addTime(456, 0.75, 4.25, new Date('2018-09-01'), "Integration testing");
 ```
 
+### Errors
+
+`getUserStory`, `getTask`, `getBug` and `addTime` can all throw an error with the following format:
+
+```typescript
+{
+    statusCode: number;
+    message: string;
+}
+```
+
 ## License
 
 Made with :sparkling_heart: by [NewOrbit](https://www.neworbit.co.uk/) in Oxfordshire, and licensed under the [MIT Licence](LICENCE)
