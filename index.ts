@@ -3,14 +3,19 @@ const btoa = require("btoa"); // tslint:disable-line:no-var-requires
 
 import fetch from "node-fetch";
 
+enum APIVersion {
+    V1,
+    V2
+}
+
 export class Targetprocess {
-    private url: string;
+    private subdomain: string;
     private headers: {
         [index: string]: string;
     };
 
     constructor(subdomain: string, username: string, password: string) {
-        this.url = `https://${subdomain}.tpondemand.com/api/v1`;
+        this.subdomain = subdomain;
 
         this.headers = {
             "Accept": "application/json",
@@ -21,15 +26,15 @@ export class Targetprocess {
     }
 
     public async getBug(id: number) {
-        return this.requestJSON(`Bugs/${id}`, "GET");
+        return this.requestJSON(APIVersion.V1, `Bugs/${id}`, "GET");
     }
 
     public async getTask(id: number) {
-        return this.requestJSON(`Tasks/${id}`, "GET");
+        return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "GET");
     }
 
     public async getStory(id: number) {
-        return this.requestJSON(`Userstories/${id}`, "GET");
+        return this.requestJSON(APIVersion.V1, `Userstories/${id}`, "GET");
     }
 
     public async addTime(id: number, spent: number, remain: number, date: Date, description: string) {
@@ -43,11 +48,12 @@ export class Targetprocess {
             }
         };
 
-        return this.requestJSON(`Times/`, "POST", body);
+        return this.requestJSON(APIVersion.V1, `Times/`, "POST", body);
     }
 
-    private async requestJSON(endpoint: string, method: string, body?: any) {
-        const fullUrl = `${this.url}/${endpoint}`;
+    private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any) {
+        const url = this.getUrlForAPIVersion(version);
+        const fullUrl = `${url}/${endpoint}`;
 
         const data = { method, headers: this.headers };
 
@@ -65,6 +71,14 @@ export class Targetprocess {
         }
 
         return res.json();
+    }
+
+    private getUrlForAPIVersion(version: APIVersion) {
+        if (version === APIVersion.V1) {
+            return `https://${this.subdomain}.tpondemand.com/api/v1`;
+        }
+        
+        return `https://${this.subdomain}.tpondemand.com/api/v2`;
     }
 
 }
