@@ -51,6 +51,23 @@ export class Targetprocess {
         return this.requestJSON(APIVersion.V1, `Times/`, "POST", body);
     }
 
+    public async getCustomValueForProject<T>(projectId: number, customValueKey: string) {
+        const url =  `Project/${projectId}?select={val:CustomValues["${customValueKey}"]}`;
+
+        try {
+            const response = await this.requestJSON(APIVersion.V2, url, "GET");
+            const item = response.items[0];
+
+            if (item.val === undefined) {
+                return null;
+            }
+
+            return item.val as T;
+        } catch (e) {
+            throw e;
+        }
+    }
+
     private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any) {
         const url = this.getUrlForAPIVersion(version);
         const fullUrl = `${url}/${endpoint}`;
