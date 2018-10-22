@@ -27,6 +27,9 @@ const bug = await getBug(789);
 
 // add a time entry to an entity
 const time = await addTime(456, 0.75, 4.25, new Date('2018-09-01'), "Integration testing");
+
+// get a custom value for a project
+const value = await getCustomValueForProject(123, "Some Custom Value");
 ```
 
 ### Errors
