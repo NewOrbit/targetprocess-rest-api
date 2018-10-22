@@ -94,7 +94,7 @@ export class Targetprocess {
         if (version === APIVersion.V1) {
             return `https://${this.subdomain}.tpondemand.com/api/v1`;
         }
-        
+
         return `https://${this.subdomain}.tpondemand.com/api/v2`;
     }
 
