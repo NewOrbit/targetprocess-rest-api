@@ -41,10 +41,12 @@ export class Targetprocess {
   private async getEntityState(name: string) {
     console.log(`Entering getEntityState(${name})`);
     try {
-      // TODO: Need to fix the hard-coded "24"
+      // TODO: Need to fix the hard-coded "26"
+      // `EntityStates?where=(Name eq '${name}')and(Process.Id eq 26)and(EntityType.Name eq 'Task')`,
+
       const response = await this.requestJSON(
         APIVersion.V1,
-        `EntityStates?where=(Name eq '${name}')and(Process.Id eq 24)and(EntityType.Name eq 'Task')`,
+        `EntityStates?where=(Name eq '${name}')and(Process.Id eq 26)and(EntityType.Name eq 'Task')`,
         'GET'
       );
       return response;
@@ -58,17 +60,20 @@ export class Targetprocess {
     console.log(`Entering setTaskState(${id}, ${stateName})`);
     const doneEntity = await this.getEntityState(stateName);
     console.log(`Got 'done' ID ${JSON.stringify(doneEntity)}`);
-    if (!doneEntity) {
-      console.warn(`couldn't find ${stateName}`);
+    console.log(`Array.isArray(doneEntity.Items) ${JSON.stringify(Array.isArray(doneEntity.Items))}`);
+    if (!doneEntity || !doneEntity.Items || !Array.isArray(doneEntity.Items) || doneEntity.Items.length > 1) {
+      console.warn(`couldn't find correct state entity ${stateName}`);
       return;
     }
 
+    const doneEntityId = doneEntity.Items[0].Id;
+
     const body = {
-      EntityState: { Id: doneEntity },
+      EntityState: { Id: doneEntityId },
     };
 
-    console.log(`Tasks/${id}: setting to ${doneEntity}`);
-    // return this.requestJSON(APIVersion.V1, `Tasks/${id}`, 'POST', body);
+    console.log(`Tasks/${id}: setting to ${doneEntityId}`);
+      return this.requestJSON(APIVersion.V1, `Tasks/${id}`, 'POST', body);
   }
 
   public async addTime(
