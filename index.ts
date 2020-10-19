@@ -1,12 +1,12 @@
 // required until https://github.com/DefinitelyTyped/DefinitelyTyped/issues/28648
-const btoa = require('btoa'); // tslint:disable-line:no-var-requires
+const btoa = require("btoa"); // tslint:disable-line:no-var-requires
 
-import { stat } from 'fs';
-import fetch from 'node-fetch';
+import { stat } from "fs";
+import fetch from "node-fetch";
 
 enum APIVersion {
   V1,
-  V2,
+  V2
 }
 
 export class Targetprocess {
@@ -19,35 +19,35 @@ export class Targetprocess {
     this.subdomain = subdomain;
 
     this.headers = {
-      Accept: 'application/json',
-      Authorization: 'Basic ' + btoa(`${username}:${password}`),
-      'Cache-Control': 'no-cache',
-      'Content-Type': 'application/json',
+      "Accept": "application/json",
+      "Authorization": "Basic " + btoa(`${username}:${password}`),
+      "Cache-Control": "no-cache",
+      "Content-Type": "application/json"
     };
   }
 
   public async getBug(id: number) {
-    return this.requestJSON(APIVersion.V1, `Bugs/${id}`, 'GET');
+    return this.requestJSON(APIVersion.V1, `Bugs/${id}`, "GET");
   }
 
   public async getTask(id: number) {
-    return this.requestJSON(APIVersion.V1, `Tasks/${id}`, 'GET');
+    return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "GET");
   }
 
   public async getStory(id: number) {
-    return this.requestJSON(APIVersion.V1, `Userstories/${id}`, 'GET');
+    return this.requestJSON(APIVersion.V1, `Userstories/${id}`, "GET");
   }
 
   private async getEntityState(name: string) {
     console.log(`Entering getEntityState(${name})`);
     try {
       // TODO: Need to fix the hard-coded "26"
-      // `EntityStates?where=(Name eq '${name}')and(Process.Id eq 26)and(EntityType.Name eq 'Task')`,
+      // `EntityStates?where=(Name eq "${name}")and(Process.Id eq 26)and(EntityType.Name eq "Task")`,
 
       const response = await this.requestJSON(
         APIVersion.V1,
-        `EntityStates?where=(Name eq '${name}')and(Process.Id eq 26)and(EntityType.Name eq 'Task')`,
-        'GET'
+        `EntityStates?where=(Name eq "${name}")and(Process.Id eq 26)and(EntityType.Name eq "Task")`,
+        "GET"
       );
       return response;
     } catch (e) {
@@ -57,12 +57,8 @@ export class Targetprocess {
   }
 
   public async setTaskState(id: number, stateName: string) {
-    console.log(`Entering setTaskState(${id}, ${stateName})`);
     const doneEntity = await this.getEntityState(stateName);
-    console.log(`Got 'done' ID ${JSON.stringify(doneEntity)}`);
-    console.log(`Array.isArray(doneEntity.Items) ${JSON.stringify(Array.isArray(doneEntity.Items))}`);
     if (!doneEntity || !doneEntity.Items || !Array.isArray(doneEntity.Items) || doneEntity.Items.length > 1) {
-      console.warn(`couldn't find correct state entity ${stateName}`);
       return;
     }
 
@@ -73,37 +69,58 @@ export class Targetprocess {
     };
 
     console.log(`Tasks/${id}: setting to ${doneEntityId}`);
-      return this.requestJSON(APIVersion.V1, `Tasks/${id}`, 'POST', body);
+      return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "POST", body);
   }
 
-  public async addTime(
-    id: number,
-    spent: number,
-    remain: number,
-    date: Date,
-    description: string
-  ) {
+  private async getEntityState(name: string) {
+    try {
+      const response = await this.requestJSON(
+        APIVersion.V1,
+        `EntityStates?where=(Name eq "${name}")and(Process.Id eq 26)and(EntityType.Name eq "Task")`,
+        "GET"
+      );
+      return response;
+    } catch (e) {
+      console.error(e);
+      return;
+    }
+  }
+
+  public async setTaskState(id: number, stateName: string) {
+    const doneEntity = await this.getEntityState(stateName);
+    if (!doneEntity || !doneEntity.Items || !Array.isArray(doneEntity.Items) || doneEntity.Items.length > 1) {
+      return;
+    }
+
+    const doneEntityId = doneEntity.Items[0].Id;
+
+    const body = {
+      EntityState: { Id: doneEntityId },
+    };
+
+    console.log(`Tasks/${id}: setting to ${doneEntityId}`);
+      return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "POST", body);
+  }
+
+  public async addTime(id: number, spent: number, remain: number, date: Date, description: string) {
     const body = {
       Spent: spent,
       Remain: remain,
       Date: date,
       Description: description,
       Assignable: {
-        Id: id,
-      },
+        Id: id
+      }
     };
 
-    return this.requestJSON(APIVersion.V1, `Times/`, 'POST', body);
+    return this.requestJSON(APIVersion.V1, `Times/`, "POST", body);
   }
 
-  public async getCustomValueForProject<T>(
-    projectId: number,
-    customValueKey: string
-  ) {
+  public async getCustomValueForProject<T>(projectId: number, customValueKey: string) {
     const url = `Project/${projectId}?select={val:CustomValues["${customValueKey}"]}`;
 
     try {
-      const response = await this.requestJSON(APIVersion.V2, url, 'GET');
+      const response = await this.requestJSON(APIVersion.V2, url, "GET");
       const item = response.items[0];
 
       if (item.val === undefined) {
@@ -116,12 +133,7 @@ export class Targetprocess {
     }
   }
 
-  private async requestJSON(
-    version: APIVersion,
-    endpoint: string,
-    method: string,
-    body?: any
-  ) {
+  private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any) {
     const url = this.getUrlForAPIVersion(version);
     const fullUrl = `${url}/${endpoint}`;
 
@@ -136,7 +148,7 @@ export class Targetprocess {
     if (!res.ok) {
       throw {
         statusCode: res.status,
-        message: res.statusText,
+        message: res.statusText
       };
     }
 
