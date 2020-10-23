@@ -37,7 +37,7 @@ export class Targetprocess {
         return this.requestJSON(APIVersion.V1, `Userstories/${id}`, "GET");
     }
 
-    private async getEntityState(name: string, processId: number) {
+    private async getTaskEntityState(name: string, processId: number) {
       try {
         const response = await this.requestJSON(
           APIVersion.V1,
@@ -52,7 +52,7 @@ export class Targetprocess {
     }
   
     public async setTaskState(id: number, stateName: string, processId: number) {
-      const doneEntity = await this.getEntityState(stateName, processId);
+      const doneEntity = await this.getTaskEntityState(stateName, processId);
       if (!doneEntity || !doneEntity.Items || !Array.isArray(doneEntity.Items) || doneEntity.Items.length > 1) {
         return;
       }
@@ -63,8 +63,7 @@ export class Targetprocess {
         EntityState: { Id: doneEntityId },
       };
   
-      console.log(`Tasks/${id}: setting to ${doneEntityId}`);
-        return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "POST", body);
+      return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "POST", body);
     }
   
     public async addTime(id: number, spent: number, remain: number, date: Date, description: string) {
