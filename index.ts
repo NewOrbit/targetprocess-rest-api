@@ -37,35 +37,21 @@ export class Targetprocess {
         return this.requestJSON(APIVersion.V1, `Userstories/${id}`, "GET");
     }
 
-    private async getTaskEntityState(name: string, processId: number) {
-      try {
-        const response = await this.requestJSON(
-          APIVersion.V1,
-          `EntityStates?where=(Name eq "${name}")and(Process.Id eq ${processId})and(EntityType.Name eq "Task")`,
-          "GET"
-        );
-        return response;
-      } catch (e) {
-        console.error(e);
-        return;
-      }
-    }
-  
     public async setTaskState(id: number, stateName: string, processId: number) {
       const doneEntity = await this.getTaskEntityState(stateName, processId);
       if (!doneEntity || !doneEntity.Items || !Array.isArray(doneEntity.Items) || doneEntity.Items.length > 1) {
         return;
       }
-  
+
       const doneEntityId = doneEntity.Items[0].Id;
-  
+
       const body = {
         EntityState: { Id: doneEntityId },
       };
-  
+
       return this.requestJSON(APIVersion.V1, `Tasks/${id}`, "POST", body);
     }
-  
+
     public async addTime(id: number, spent: number, remain: number, date: Date, description: string) {
         const body = {
             Spent: spent,
@@ -94,6 +80,20 @@ export class Targetprocess {
             return item.val as T;
         } catch (e) {
             throw e;
+        }
+    }
+
+    private async getTaskEntityState(name: string, processId: number) {
+        try {
+          const response = await this.requestJSON(
+            APIVersion.V1,
+            `EntityStates?where=(Name eq "${name}")and(Process.Id eq ${processId})and(EntityType.Name eq "Task")`,
+            "GET"
+          );
+          return response;
+        } catch (e) {
+          console.error(e);
+          return;
         }
     }
 
