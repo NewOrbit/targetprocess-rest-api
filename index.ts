@@ -2,6 +2,7 @@
 const btoa = require("btoa"); // tslint:disable-line:no-var-requires
 
 import fetch from "node-fetch";
+import { URLSearchParams } from "url";
 
 enum APIVersion {
     V1,
@@ -10,19 +11,29 @@ enum APIVersion {
 
 export class Targetprocess {
     private subdomain: string;
+    private accessToken: string;
     private headers: {
         [index: string]: string;
     };
 
-    constructor(subdomain: string, username: string, password: string) {
+    constructor(
+        subdomain: string,
+        username?: string,
+        password?: string,
+        config?: { accessToken?: string }
+    ) {
         this.subdomain = subdomain;
+        this.accessToken = config && config.accessToken;
 
         this.headers = {
             "Accept": "application/json",
-            "Authorization": "Basic " + btoa(`${username}:${password}`),
             "Cache-Control": "no-cache",
             "Content-Type": "application/json"
         };
+
+        if (username && password) {
+            this.headers.Authorization = "Basic " + btoa(`${username}:${password}`);
+        }
     }
 
     public async getBug(id: number) {
@@ -99,7 +110,8 @@ export class Targetprocess {
 
     private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any) {
         const url = this.getUrlForAPIVersion(version);
-        const fullUrl = `${url}/${endpoint}`;
+        const params = this.getUrlParams();
+        const fullUrl = `${url}/${endpoint}?${params}`;
 
         const data = { method, headers: this.headers };
 
@@ -127,4 +139,13 @@ export class Targetprocess {
         return `https://${this.subdomain}.tpondemand.com/api/v2`;
     }
 
+    private getUrlParams(): URLSearchParams {
+        const params = new URLSearchParams();
+
+        if (this.accessToken) {
+            params.append("access_token", this.accessToken);
+        }
+
+        return params;
+    }
 }
