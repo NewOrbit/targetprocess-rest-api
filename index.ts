@@ -23,7 +23,7 @@ export class Targetprocess {
         config?: { accessToken?: string }
     ) {
         this.subdomain = subdomain;
-        this.accessToken = config?.accessToken;
+        this.accessToken = config && config.accessToken;
 
         this.headers = {
             "Accept": "application/json",
