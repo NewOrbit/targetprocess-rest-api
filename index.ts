@@ -98,8 +98,12 @@ export class Targetprocess {
         try {
           const response = await this.requestJSON(
             APIVersion.V1,
-            `EntityStates?where=(Name eq "${name}")and(Process.Id eq ${processId})and(EntityType.Name eq "Task")`,
-            "GET"
+            `EntityStates`,
+            "GET",
+            undefined,
+            new URLSearchParams({
+              where: `Name eq '${name}' and Process.Id eq ${processId} and EntityType.Name eq 'Task'`,
+            })
           );
           return response;
         } catch (e) {
@@ -108,9 +112,16 @@ export class Targetprocess {
         }
     }
 
-    private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any) {
+    private async requestJSON(version: APIVersion, endpoint: string, method: string, body?: any, requestParams?: URLSearchParams) {
         const url = this.getUrlForAPIVersion(version);
-        const params = this.getUrlParams();
+        const params =  this.getUrlParams();
+
+        if (requestParams) {
+            requestParams.forEach((value, key) => {
+                params.append(key, value);
+            });
+        }
+
         const fullUrl = `${url}/${endpoint}?${params}`;
 
         const data = { method, headers: this.headers };
