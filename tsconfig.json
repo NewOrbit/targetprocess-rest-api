@@ -3,7 +3,7 @@
         "module": "commonjs",
         "moduleResolution": "node",
         "lib": [
-            "es2015"
+            "es2015", "DOM"
         ],
         "experimentalDecorators": true,
         "declaration": true
