@@ -78,10 +78,13 @@ export class Targetprocess {
     }
 
     public async getCustomValueForProject<T>(projectId: number, customValueKey: string) {
-        const url =  `Project/${projectId}?select={val:CustomValues["${customValueKey}"]}`;
+        const url = `Project/${projectId}`;
+        const requestParams = new URLSearchParams({
+            select: `{val:CustomValues["${customValueKey}"]}`
+        });
 
         try {
-            const response = await this.requestJSON(APIVersion.V2, url, "GET");
+            const response = await this.requestJSON(APIVersion.V2, url, "GET", undefined, requestParams);
             const item = response.items[0];
 
             if (item.val === undefined) {
